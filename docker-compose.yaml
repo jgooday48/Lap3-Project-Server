@@ -1,0 +1,20 @@
+# docker-compose.yaml
+version: '3'
+services:
+  db:
+    image: mongo:6
+    container_name: NotesApp
+    ports:
+      - 27017:27017
+    environment: 
+      - MONGO_INITDB_ROOT_USERNAME=<replace with username>
+      - MONGO_INITDB_DATABASE=<replace with database_name>
+      - MONGO_INITDB_ROOT_PASSWORD=<replace with password password>
+    volumes:
+      - dbdata:/data/db
+      # optional - ./db/seed.js:/docker-entrypoint-initdb.d/seed.js:ro
+volumes:
+  dbdata:
+    name: <give your volume a name (optional)>
+
+# DB_URL=mongodb://username:password@localhost:27017/database?authSource=admin

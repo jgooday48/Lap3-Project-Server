@@ -9,6 +9,10 @@ This is the server for the notes app.
 - Copy and paste `PORT=3000` and `MONGO_ARI=DB_URL` into the .env file
 - Visit the Mongo DB website (https://www.mongodb.com/) and set up a db instance
 - Replace `DB_URL` with the URL of your mongo db instance
+- Edit the yaml file 
+- Open Docker
+- `docker pull mongo`
+- `docker compose up -d`
 - Run `npm run dev` to start the server
 
 ## Technologies used
