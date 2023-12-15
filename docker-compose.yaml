@@ -7,9 +7,9 @@ services:
     ports:
       - 27017:27017
     environment: 
-      - MONGO_INITDB_ROOT_USERNAME=<replace with username>
-      - MONGO_INITDB_DATABASE=<replace with database_name>
-      - MONGO_INITDB_ROOT_PASSWORD=<replace with password password>
+      - MONGO_INITDB_ROOT_USERNAME=   #<replace with username>
+      - MONGO_INITDB_DATABASE=notes     #<replace with database_name>
+      - MONGO_INITDB_ROOT_PASSWORD=  #<replace with password password>
     volumes:
       - dbdata:/data/db
       # optional - ./db/seed.js:/docker-entrypoint-initdb.d/seed.js:ro
