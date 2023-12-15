@@ -3,7 +3,7 @@ version: '3'
 services:
   db:
     image: mongo:6
-    container_name: NotesApp
+    container_name: Notes_App
     ports:
       - 27017:27017
     environment: 
@@ -15,6 +15,6 @@ services:
       # optional - ./db/seed.js:/docker-entrypoint-initdb.d/seed.js:ro
 volumes:
   dbdata:
-    name: <give your volume a name (optional)>
+    name: Notes_App_Vol
 
 # DB_URL=mongodb://username:password@localhost:27017/database?authSource=admin
