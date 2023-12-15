@@ -1,5 +1,6 @@
 # Lap3-Project-Server
 
+This is the server for the notes app.
 ## Installation
 
 - Clone or fork this repo
