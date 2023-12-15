@@ -6,19 +6,20 @@
   "keywords":[],
   "author":"",
   "license":"ISC",
-"scripts":{
-  "dev":"nodemon -L app.js",
-  "test": "jest --watchAll --detectOpenHandles --runInBand --verbose",
-  "unitTests": "jest --testPathPattern=/unit/ --watchAll --verbose",
-  "coverage": "jest --coverage"
+  "scripts":{
+    "dev":"nodemon -L app.js",
+    "test": "jest --watchAll --detectOpenHandles --runInBand --verbose",
+    "unitTests": "jest --testPathPattern=/unit/ --watchAll --verbose",
+    "coverage": "jest --coverage"
   },
-  "dependencies": {
-    "bcrypt":"^5.1.1",
-    "cors":"^2.8.5",
-    "dotenv":"^16.3.1",
-    "express":"^4.18.2",
-    "mongoose":"^8.0.3",
-    "morgan":"^1.10.0"},
+    "dependencies": {
+      "bcrypt":"^5.1.1",
+      "cors":"^2.8.5",
+      "dotenv":"^16.3.1",
+      "express":"^4.18.2",
+      "mongoose":"^8.0.3",
+      "morgan":"^1.10.0"
+  },
     "devDependencies": { 
       "jest":"^29.7.0",
       "nodemon":"^3.0.2",
