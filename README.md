@@ -13,7 +13,7 @@ This is the server for the notes app. The client side can be found [here](https:
 - Replace the username and password with your own credentials in the URL in the .env file
 - Run `docker compose up -d` to start running the docker container
 - Run `npm run dev` to start the server
-- See the [client side repo](https://github.com/jgooday48/Lap3-Project-Client) to set up the client side
+- See the [client side repo](https://github.com/jgooday48/Lap3-Project-Client) for instructions to set up the client side
 
 ## Technologies 
 - Mongoose 
