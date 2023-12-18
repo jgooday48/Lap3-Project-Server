@@ -2,28 +2,19 @@ const mongoose = require("mongoose")
 
 
 const NotesSchema = new mongoose.Schema({
-    Note_ID: {
-      type: ObjectId,
-      required
-    },
     Title: {
-      type: String,
+        type: String,
     },
     Content: {
         type: String,
-        required
-      },
-    
-      IsImportant: {
+        
+    },
+    IsImportant: {
         type: Boolean,
-      },
-      Section: {
+    },
+    Section: {
         type: String,
-      },
-      User_Id: {
-        type: ObjectId,
-      },
-    
+    },    
   },{ timestamps: true });
   
   module.exports = mongoose.model("Notes", NotesSchema); //make data schema
