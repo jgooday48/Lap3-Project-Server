@@ -8,6 +8,7 @@ const cookieParser = require("cookie-parser")
 
 // const Routes = require('./routes/')
 const userRoutes = require("./routers/users")
+const { notFound, errorHandler } = require("./middleware/errorMiddleware")
 
 const port = process.env.PORT || 3000;
 
@@ -33,11 +34,14 @@ mongoose.connect(process.env.DB_URI) //connect mongoose db
     })
 
 
-app.use("/users", userRoutes)
+app.use("/user", userRoutes)
+
 
 app.get('/', (req,res) => {
     res.json({message: "welcome"})
 })
 
+app.use(notFound);
+app.use(errorHandler);
 
 module.exports = app
