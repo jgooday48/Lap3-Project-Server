@@ -3,12 +3,16 @@ require('dotenv').config()
 const express = require('express')
 const cors = require('cors')
 const mongoose = require('mongoose')
+
 const cookieParser = require("cookie-parser")
+
 
 
 // const Routes = require('./routes/')
 const userRoutes = require("./routers/users")
+const notesRouter = require("./routers/notes")
 const { notFound, errorHandler } = require("./middleware/errorMiddleware")
+
 
 const port = process.env.PORT || 3000;
 
@@ -17,7 +21,9 @@ app.use(express.json())
 app.use(express.urlencoded({extended: true}))
 app.use(cors())
 
+
 app.use(cookieParser());
+
 
 // app.use('/', Routes)
 
@@ -35,6 +41,7 @@ mongoose.connect(process.env.DB_URI) //connect mongoose db
 
 
 app.use("/user", userRoutes)
+app.use("/notes", notesRouter)
 
 
 app.get('/', (req,res) => {
