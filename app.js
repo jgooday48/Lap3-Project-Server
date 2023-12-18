@@ -11,8 +11,9 @@ const cookieParser = require("cookie-parser")
 
 // const Routes = require('./routes/')
 const userRoutes = require("./routers/users")
-
 const notesRouter = require("./routers/notes")
+const foldersRouter = require("./routers/folders")
+
 const { notFound, errorHandler } = require("./middleware/errorMiddleware")
 
 
@@ -46,6 +47,7 @@ mongoose.connect(process.env.DB_URI) //connect mongoose db
 
 app.use("/user", userRoutes)
 app.use("/notes", notesRouter)
+app.use("/folders", foldersRouter)
 
 
 app.get('/', (req,res) => {
