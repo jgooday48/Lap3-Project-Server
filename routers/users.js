@@ -6,7 +6,7 @@ const protect = require("../middleware/authMiddleware")
 userRouter.post("/auth", authUser)
 userRouter.post("/", registerUser)
 userRouter.post("/logout", logoutUser)
-userRouter.route("/profile").get(protect, getUserProfile).patch(protect, updateUserProfile)
+userRouter.route("/profile").get(getUserProfile).patch(updateUserProfile)
 userRouter.get("/hello", hello);
 
 module.exports = userRouter
