@@ -26,16 +26,30 @@ const getNote = async (req, res) => {
 
 
 //CREATE a new note
-const createNote = async (req, res) => {
-    const { Title, Content, IsImportant, Section, User_Id, Note_ID } = req.body
-    try {
-        const note = await Note.create({ Title, Content, IsImportant, Section, User_Id, Note_ID })
-        res.status(200).json(note)
-    } catch (error) {
-        res.status(400).json({ error: error.message })
+// const createNote = async (req, res) => {
+//     const { Title, Content, IsImportant, Section, User_Id, Note_ID } = req.body
+//     try {
+//         const note = await Note.create({ Title, Content, IsImportant, Section, User_Id, Note_ID })
+//         res.status(200).json(note)
+//     } catch (error) {
+//         res.status(400).json({ error: error.message })
         
+//     }
+// }
+
+
+
+const createNote = async (req, res) => {
+    const { Title, Content, IsImportant, Section_Id, User_Id } = req.body;
+    try {
+        // Assuming Content is an object with a "text" property
+        const note = await Note.create({ Title, Content, IsImportant, Section: Section_Id, User: User_Id });
+        res.status(201).json(note);
+    } catch (error) {
+        res.status(400).json({ error: error.message });
     }
-}
+};
+
 
 
 
