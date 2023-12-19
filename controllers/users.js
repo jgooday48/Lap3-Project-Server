@@ -74,10 +74,11 @@ const logoutUser = asyncHandler(async (req, res) => {
 // @access private
 const getUserProfile = asyncHandler(async (req, res) => {
     const user = {
-        _id: req.user._id,
-        name: req.user.name,
-        email: req.user.email,
+        _id: req.body.user._id,
+        name: req.body.user.name,
+        email: req.body.user.email,
     };
+    console.log(user)
 
     res.status(200).json(user);
 })
@@ -104,17 +105,12 @@ const updateUserProfile = asyncHandler(async (req, res) => {
         });
 
     }else{
-        res.status(404);
-        throw new Error("User not found")
+        res.status(404).json({message:"User not found"});
+        // throw new Error("User not found")
     }
 })
 
-const hello = (req, res) => {
-    res.send("test")
-}
-
 module.exports = {
-    hello,
     authUser,
     registerUser,
     logoutUser,

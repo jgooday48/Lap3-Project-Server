@@ -7,7 +7,6 @@ userRouter.post("/auth", authUser)
 userRouter.post("/", registerUser)
 userRouter.post("/logout", logoutUser)
 userRouter.route("/profile").get(getUserProfile).patch(updateUserProfile)
-userRouter.get("/hello", hello);
 
 module.exports = userRouter
 

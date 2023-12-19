@@ -7,6 +7,7 @@ const {generateToken} = require("../../../utils/generateToken")
 jest.mock('express-async-handler', () => (handler) => (req, res, next) => handler(req, res, next));
 jest.mock('../../../utils/generateToken', () => (res, userId) => {}); 
 
+
 describe('authUser', () => {
   const mockUserData = {
     _id: 'mockUserId',
@@ -111,9 +112,81 @@ describe('registerUser', () => {
   });
 });
 
+describe('logoutUser', () => {
+  it('should log out the user and return a success message', async () => {
+    const response = await request(app).post('/user/logout');
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveProperty('message', 'User logged out');
+  });
+});
 
 
+describe('updateUserProfile', () => {
+  const mockUser = {
+    _id: 'mockUserId',
+    name: 'John Doe',
+    email: 'john.doe@example.com',
+    password: 'password123',
+    save: jest.fn(),
+  };
 
+  beforeAll(async () => {
+
+  });
+
+  afterAll(async () => {
+
+  });
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
+  it('should update the user profile and return updated user data', async () => {
+    jest.spyOn(User, 'findById').mockResolvedValueOnce(mockUser);
+    jest.spyOn(User, 'findOne').mockResolvedValueOnce(null);
+
+    mockUser.save.mockResolvedValueOnce(mockUser);
+
+    const response = await request(app)
+      .patch('/user/profile')
+      .send({
+        _id: 'mockUserId',
+        name: 'Updated Name',
+        email: 'updated.email@example.com',
+        password: 'newpassword',
+      });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toEqual({
+      _id: 'mockUserId',
+      name: 'Updated Name',
+      email: 'updated.email@example.com',
+    });
+
+    expect(User.findById).toHaveBeenCalledWith('mockUserId');
+    expect(mockUser.name).toBe('Updated Name');
+    expect(mockUser.email).toBe('updated.email@example.com');
+    expect(mockUser.password).toBe('newpassword');
+  });
+
+  it('should handle user not found and return a 404 status with error message', async () => {
+    jest.spyOn(User, 'findById').mockResolvedValueOnce(null);
+
+    const response = await request(app)
+      .patch('/user/profile')
+      .send({
+        _id: 'nonexistentUserId',
+        name: 'Updated Name',
+        email: 'updated.email@example.com',
+        password: 'newpassword',
+      });
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body).toHaveProperty('message', 'User not found');
+    expect(User.findById).toHaveBeenCalledWith('nonexistentUserId');
+  });
+});
 
 
 
