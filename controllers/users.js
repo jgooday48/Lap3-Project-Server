@@ -86,8 +86,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 // route PATCH /users/profile
 // @access private
 const updateUserProfile = asyncHandler(async (req, res) => {
-    const user = await User.findById(req.body._id);
-
+    const user  =  await User.findById(req.body._id);
 
     if(user){
         user.name = req.body.name || user.name;
