@@ -17,12 +17,6 @@ beforeEach(async () => {
 
       await mongoose.connect(url);
       
-      // await mongoose.connect(process.env.DB_URI_TEST); // connect mongoose db
-
-      // app.listen(4000, () => {
-      //     console.log(`API listening on Port ${4000}`
-      // )})
-      
 });
   
 afterEach(async () => {
