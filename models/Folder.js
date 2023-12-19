@@ -1,6 +1,5 @@
 const mongoose = require("mongoose");
-const Note = require('./Note')
-const User = require('./User')
+
 
 const FolderSchema = new mongoose.Schema(
     {
@@ -8,10 +7,10 @@ const FolderSchema = new mongoose.Schema(
         type: String,
       },
       Note: {
-        type: Note,
+        type: String,
       },
       User: {
-        type: User
+        type: String
     }
     },
     
