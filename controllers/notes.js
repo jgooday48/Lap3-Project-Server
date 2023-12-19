@@ -12,10 +12,10 @@ const getAllNotes = async (req, res) => {
 
 const getAllNotesByFolder = async (req, res) => {
       try {
-        // Assuming you pass the folderId as a parameter in the request
+        
           const folderId = req.params.folderId;
 
-        // Use Mongoose to find all notes in the specified folder
+        
         const notes = await Note.find({ Folder: folderId });
 
         res.status(200).json(notes );
@@ -23,6 +23,24 @@ const getAllNotesByFolder = async (req, res) => {
         console.error(error);
         res.status(500).json({ success: false, error: 'Server Error' });
     }
+};
+
+const getAllNotesByName = async (req, res) => {
+  const { name } = req.params;
+
+  try {
+    const notes = await Note.find({ Name: { $regex: new RegExp(name, 'i') } })
+      .populate('Folder')
+      .populate('User');
+
+    if (notes.length === 0) {
+      return res.status(404).json({ error: "No notes found with the given name" });
+    }
+
+    res.status(200).json(notes);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
 };
 
 
@@ -45,7 +63,7 @@ const getNote = async (req, res) => {
 
 
 const createNote = async (req, res) => {
-    const { Name, Content, IsImportant, folderId, userId } = req.body;
+    const { Name, Content, IsImportant, folderId, User } = req.body;
 
     // Check if a note with the same Name and content already exists
     const existingNote = await Note.findOne({ Name, Content });
@@ -60,7 +78,7 @@ const createNote = async (req, res) => {
                 Content,
                 IsImportant: IsImportant || false,
                 Folder: folderId,
-                User: userId
+                User: User
             });
 
             // Save the new note
@@ -110,28 +128,6 @@ const updateNote = async (req, res) => {
       return res.status(404).json({ error: "Note not found" });
     }
 
-    // Update only if the fields are present in the request body
-    // if (Name !== undefined) existingNote.Name = Name;
-    // if (Content !== undefined) existingNote.Content = Content;
-    // if (IsImportant !== undefined) existingNote.IsImportant = IsImportant;
-
-    // // Check if User_Id is provided, and if so, find the corresponding user
-    // if (User_Id !== undefined) {
-    //   const user = await User.findOne({ _id: User_Id });
-    //   if (!user) {
-    //     return res.status(404).json({ error: "User not found" });
-    //   }
-    //   existingNote.User = user;
-    // }
-
-    // Check if Section_Id is provided, and if so, find the corresponding section
-    // if (Section_Id !== undefined) {
-    //   const section = await Section.findOne({ _id: Section_Id });
-    //   if (!section) {
-    //     return res.status(404).json({ error: "Section not found" });
-    //   }
-    //   existingNote.Section = section;
-    // }
       const updatedNote = await Note.findById(id);
  
 
@@ -158,5 +154,6 @@ module.exports = {
     getNote,
     deleteNote,
     updateNote,
-    getAllNotesByFolder
+    getAllNotesByFolder,
+    getAllNotesByName
 }
