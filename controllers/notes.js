@@ -1,5 +1,7 @@
 const Note = require('../models/Note')
 const mongoose = require('mongoose')
+const User = require('../models/User')
+const Section = require('../models/Folder')
 
 //GET all notes
 const getAllNotes = async (req, res) => {
@@ -27,15 +29,14 @@ const getNote = async (req, res) => {
 
 //CREATE a new note
 const createNote = async (req, res) => {
-    const { Title, Content, IsImportant, Section, User_Id, Note_ID } = req.body
+    const { Title, Content, IsImportant, Section_Id, User_Id } = req.body;
     try {
-        const note = await Note.create({ Title, Content, IsImportant, Section, User_Id, Note_ID })
-        res.status(200).json(note)
+        const note = await Note.create({ Title, Content, IsImportant, Section: Section_Id, User: User_Id });
+        res.status(201).json(note);
     } catch (error) {
-        res.status(400).json({ error: error.message })
-        
+        res.status(400).json({ error: error.message });
     }
-}
+};
 
 
 
@@ -55,32 +56,43 @@ const deleteNote = async(req,res)=>{
 }
 
 
-
-
-
 //UPDATE a note
-const updateNote = async (req,res) => {
-    const { noteId } = req.params
-    const { Title, Content, IsImportant, Section, User_Id, Note_ID } = req.body
-
+const updateNote = async (req, res) => {
+    const { noteId } = req.params;
+    const { Title, Content, IsImportant, Section_Id, User_Id } = req.body;
     try {
-        const existingNote = await Note.findOne({ Note_ID : noteId})
-        if(!existingNote){
-            return res.status(404).json({ error:"note not found"})
+      const existingNote = await Note.findOne({ _id: noteId });
+      if (!existingNote) {
+        return res.status(404).json({ error: "Note not found" });
+      }
+      // Update only if the fields are present in the request body
+      if (Title !== undefined) existingNote.Title = Title;
+      if (Content !== undefined) existingNote.Content = Content;
+      if (IsImportant !== undefined) existingNote.IsImportant = IsImportant;
+      // Check if User_Id is provided, and if so, find the corresponding user
+      if (User_Id !== undefined) {
+        const user = await User.findOne({ _id: User_Id });
+        if (!user) {
+          return res.status(404).json({ error: "User not found" });
         }
-        if (Title) existingNote.Title = Title;
-        if (Content) existingNote.Content = Content;
-        if (IsImportant !== undefined) existingNote.IsImportant = IsImportant;
-        if (Section) existingNote.Section = Section;
-        if (User_Id) existingNote.User_Id = User_Id;
-        if (Note_ID) existingNote.Note_ID = Note_ID;
-
-await existingNote.save()
-res.status(500).json({ message:"Note updated",updateNote:existingNote})
+        existingNote.User = user;
+      }
+      // Check if Section_Id is provided, and if so, find the corresponding section
+      if (Section_Id !== undefined) {
+        const section = await Section.findOne({ _id: Section_Id });
+        if (!section) {
+          return res.status(404).json({ error: "Section not found" });
+        }
+        existingNote.Section = section;
+      }
+      await existingNote.save();
+      // Return a success message along with the updated note
+      res.status(200).json({ message: "Note updated", updateNote: existingNote });
     } catch (error) {
-        res.status(400).json({ error: error.message })
+      // Handle errors and return an appropriate response
+      res.status(400).json({ error: error.message });
     }
-} 
+  };
 
 
 
