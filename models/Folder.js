@@ -7,14 +7,9 @@ const FolderSchema = new mongoose.Schema(
       Name: {
         type: String,
       },
-      Note: {
-        type: mongoose.Schema.Types.ObjectId, ref: 'Notes',
-      },
       User: {
         type: mongoose.Schema.Types.ObjectId, ref: 'User',
     }
-    },
-    
-  );
+    },{ timestamps: true });
   
   module.exports = mongoose.model("Folders", FolderSchema); 

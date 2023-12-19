@@ -1,5 +1,7 @@
- const Folders = require("../models/Folder")
- const mongoose = require("mongoose")
+const Folders = require("../models/Folder")
+const mongoose = require("mongoose")
+const User = require('../models/User')
+const Section = require('../models/Folder')
 
 
 
@@ -27,9 +29,9 @@
 
  //CREATE a new folder
  const createFolder = async (req, res) => {
-    const { Name, User_Id, Note_ID } = req.body
+    const { Name, User_ID } = req.body
     try {
-        const folder = await Folders.create({ Name, User_Id, Note_ID})
+        const folder = await Folders.create({ Name, User: User_ID })
         res.status(200).json(folder)
     } catch (error) {
         res.status(400).json({ error: error.message })
@@ -60,7 +62,7 @@
 
  const updateFolder = async (req, res) => {
     const { folderId } = req.params;
-    const { Name, Folder_ID, User_ID, Note_ID } = req.body;
+    const { Name, User_ID } = req.body;
   
     try {
       const existingFolder = await Folders.findOne({ Folder_ID: folderId });
@@ -68,9 +70,13 @@
         return res.status(404).json({ error: "folder not found" });
       }
       if (Name !== undefined) existingFolder.Name = Name;
-      if (Folder_ID !== undefined) existingFolder.Folder_ID = Content;
-      if (User_ID !== undefined) existingFolder.User_ID = User_ID;
-      if (Note_ID !== undefined) existingFolder.Note_ID = Note_ID;
+      if (User_ID !== undefined) {
+        const user = await User.findOne({ _id: User_ID });
+        if (!user) {
+          return res.status(404).json({ error: "User not found" });
+        }
+        existingFolder.User = user;
+      }
       await existingFolder.save();
       res.status(200).json({ message: "Folder updated", updateFolder: existingFolder });
     } catch (error) {
