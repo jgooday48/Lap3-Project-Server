@@ -45,9 +45,9 @@ const User = require('../models/User')
 
  //CREATE a new folder
  const createFolder = async (req, res) => {
-    const { Name, User_ID } = req.body
+    const { Name, User } = req.body
     try {
-        const folder = await Folders.create({ Name, User: User_ID })
+        const folder = await Folders.create({ Name, User: User})
         res.status(200).json(folder)
     } catch (error) {
         res.status(400).json({ error: error.message })

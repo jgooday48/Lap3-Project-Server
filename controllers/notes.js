@@ -37,7 +37,7 @@ const getAllNotesByName = async (req, res) => {
       return res.status(404).json({ error: "No notes found with the given name" });
     }
 
-    res.status(200).json({ message: "Notes found", notes });
+    res.status(200).json(notes);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -63,7 +63,7 @@ const getNote = async (req, res) => {
 
 
 const createNote = async (req, res) => {
-    const { Name, Content, IsImportant, folderId, userId } = req.body;
+    const { Name, Content, IsImportant, folderId, User } = req.body;
 
     // Check if a note with the same Name and content already exists
     const existingNote = await Note.findOne({ Name, Content });
@@ -78,7 +78,7 @@ const createNote = async (req, res) => {
                 Content,
                 IsImportant: IsImportant || false,
                 Folder: folderId,
-                User: userId
+                User: User
             });
 
             // Save the new note
