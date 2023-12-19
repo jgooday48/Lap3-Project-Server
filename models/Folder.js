@@ -1,19 +1,18 @@
 const mongoose = require("mongoose");
+const Note = require('./Note')
+const User = require('./User')
 
 const FolderSchema = new mongoose.Schema(
     {
       Name: {
         type: String,
       },
-      Note_ID: {
-        type: String,
+      Note: {
+        type: Note,
       },
-      User_ID: {
-        type: String,
-      },
-      Section_ID: {
-        type: String,
-      },
+      User: {
+        type: User
+    }
     },
     
   );
