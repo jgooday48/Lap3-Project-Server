@@ -7,13 +7,15 @@ const {
     getNote,
     deleteNote,
     updateNote,
-    getAllNotesBySection
+    getAllNotesByFolder,
+    getAllNotesByName
 
 } = require('../controllers/notes')
 
 notesRouter.post('/', createNote)
 notesRouter.get('/', getAllNotes)
-notesRouter.get("/section/:sectionId", getAllNotesBySection)
+notesRouter.get("/folder/:folderId", getAllNotesByFolder)
+notesRouter.get("/name/:name", getAllNotesByName)
 notesRouter.get('/:id', getNote)
 notesRouter.delete('/:id', deleteNote)
 notesRouter.patch('/:id', updateNote)
