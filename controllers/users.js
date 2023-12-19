@@ -10,11 +10,15 @@ const authUser = asyncHandler(async (req, res) => {
     const user = await User.findOne({email});
 
     if(user && (await user.matchPassword(password))){
-        await generateToken(res, user._id);
+        // await generateToken(res, user._id);
+
+        const token = await generateToken(res, user._id);
+
         res.status(201).json({
             _id: user._id,
             name: user.name,
-            email: user.email
+            email: user.email,
+            token: token,
         });
     } else {
         res.status(401);
@@ -82,7 +86,8 @@ const getUserProfile = asyncHandler(async (req, res) => {
 // route PATCH /users/profile
 // @access private
 const updateUserProfile = asyncHandler(async (req, res) => {
-    const user  =  await User.findById(req.user._id);
+    const user = await User.findById(req.body._id);
+
 
     if(user){
         user.name = req.body.name || user.name;
@@ -95,7 +100,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
         const updatedUser = await user.save();
         res.status(200).json({
             _id: updatedUser._id,
-            name: updatedUser._id,
+            name: updatedUser.name,
             email: updatedUser.email,
         });
 
