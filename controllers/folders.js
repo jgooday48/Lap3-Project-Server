@@ -1,7 +1,7 @@
 const Folders = require("../models/Folder")
 const mongoose = require("mongoose")
 const User = require('../models/User')
-const Section = require('../models/Folder')
+
 
 
 
@@ -27,11 +27,27 @@ const Section = require('../models/Folder')
     res.status(200).json(folder)    
 }
 
+
+  const getAllFoldersByUser = async (req, res) => {
+    try {
+      const userId = req.params.userId; 
+
+      // Find all folders by user ID
+      const folders = await Folders.find({ User: userId });
+
+      // Send the folders as a response
+      res.status(200).json(folders);
+    } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  }
+
  //CREATE a new folder
  const createFolder = async (req, res) => {
-    const { Name, User_ID } = req.body
+    const { Name, User } = req.body
     try {
-        const folder = await Folders.create({ Name, User: User_ID })
+        const folder = await Folders.create({ Name, User: User})
         res.status(200).json(folder)
     } catch (error) {
         res.status(400).json({ error: error.message })
@@ -94,5 +110,6 @@ const Section = require('../models/Folder')
     getFolder,
     createFolder,
     deleteFolder,
-    updateFolder
+   updateFolder,
+    getAllFoldersByUser
  }

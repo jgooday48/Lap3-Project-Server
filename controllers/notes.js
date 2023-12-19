@@ -9,6 +9,41 @@ const getAllNotes = async (req, res) => {
     res.status(200).json(notes)
 }
 
+
+const getAllNotesByFolder = async (req, res) => {
+      try {
+        
+          const folderId = req.params.folderId;
+
+        
+        const notes = await Note.find({ Folder: folderId });
+
+        res.status(200).json(notes );
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, error: 'Server Error' });
+    }
+};
+
+const getAllNotesByName = async (req, res) => {
+  const { name } = req.params;
+
+  try {
+    const notes = await Note.find({ Name: { $regex: new RegExp(name, 'i') } })
+      .populate('Folder')
+      .populate('User');
+
+    if (notes.length === 0) {
+      return res.status(404).json({ error: "No notes found with the given name" });
+    }
+
+    res.status(200).json(notes);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
+
 //GET a single notes
 const getNote = async (req, res) => {
     const { id } = req.params
@@ -20,34 +55,39 @@ const getNote = async (req, res) => {
     }
 
     if (!note) {
-        return res.status(404).json({error: 'No such user'})
+        return res.status(404).json({error: 'No such note'})
     }
     res.status(200).json(note)    
 }
 
 
 
-//CREATE a new note
-// const createNote = async (req, res) => {
-//     const { Title, Content, IsImportant, Section, User_Id, Note_ID } = req.body
-//     try {
-//         const note = await Note.create({ Title, Content, IsImportant, Section, User_Id, Note_ID })
-//         res.status(200).json(note)
-//     } catch (error) {
-//         res.status(400).json({ error: error.message })
-        
-//     }
-// }
-
-
-
 const createNote = async (req, res) => {
-    const { Title, Content, IsImportant, Section_Id, User_Id } = req.body;
-    try {
-        const note = await Note.create({ Title, Content, IsImportant, Section: Section_Id, User: User_Id });
-        res.status(201).json(note);
-    } catch (error) {
-        res.status(400).json({ error: error.message });
+    const { Name, Content, IsImportant, folderId, User } = req.body;
+
+    // Check if a note with the same Name and content already exists
+    const existingNote = await Note.findOne({ Name, Content });
+
+    if (existingNote) {
+        res.status(409).json({ error: 'Note with the same Name and content already exists' });
+    } else {
+        try {
+            // Create a new note
+            const newNote = new Note({
+                Name,
+                Content,
+                IsImportant: IsImportant || false,
+                Folder: folderId,
+                User: User
+            });
+
+            // Save the new note
+            await newNote.save();
+            res.status(201).json(newNote);
+        } catch (error) {
+            console.error('Error creating note:', error);
+            res.status(500).json({ error: 'Internal Server Error' });
+        }
     }
 }
 
@@ -57,6 +97,7 @@ const createNote = async (req, res) => {
 const deleteNote = async(req,res)=>{
     const { noteId } = req.params;
     try {
+
         const existingNote = await Note.findOne({ Note_ID : noteId})
         if(!existingNote){
             return res.status(404).json({ error:"note not found"})
@@ -70,28 +111,32 @@ const deleteNote = async(req,res)=>{
 
 
 //UPDATE a note
-const updateNote = async (req,res) => {
-    const { noteId } = req.params
-    const { Title, Content, IsImportant, Section, User_Id, Note_ID } = req.body
+const updateNote = async (req, res) => {
+  const { noteId } = req.params;
+  const { Title, Content, IsImportant, Section_Id, User_Id } = req.body;
 
-    try {
-        const existingNote = await Note.findOne({ Note_ID : noteId})
-        if(!existingNote){
-            return res.status(404).json({ error:"note not found"})
-        }
-        if (Title) existingNote.Title = Title;
-        if (Content) existingNote.Content = Content;
-        if (IsImportant !== undefined) existingNote.IsImportant = IsImportant;
-        if (Section) existingNote.Section = Section;
-        if (User_Id) existingNote.User_Id = User_Id;
-        if (Note_ID) existingNote.Note_ID = Note_ID;
-
-await existingNote.save()
-res.status(500).json({ message:"Note updated",updateNote:existingNote})
-    } catch (error) {
-        res.status(400).json({ error: error.message })
+  try {
+    const existingNote = await Note.findOne({ Note_ID: noteId });
+    if (!existingNote) {
+      return res.status(404).json({ error: "Note not found" });
     }
-} 
+
+    // Update only if the fields are present in the request body
+    if (Title !== undefined) existingNote.Title = Title;
+    if (Content !== undefined) existingNote.Content = Content;
+    if (IsImportant !== undefined) existingNote.IsImportant = IsImportant;
+    if (Section_Id !== undefined) existingNote.Section_Id = Section_Id;
+    if (User_Id !== undefined) existingNote.User_Id = User_Id;
+
+    await existingNote.save();
+    
+    // Return a success message along with the updated note
+    res.status(200).json({ message: "Note updated", updateNote: existingNote });
+  } catch (error) {
+    // Handle errors and return an appropriate response
+    res.status(400).json({ error: error.message });
+  }
+};
 
 
 
@@ -103,5 +148,7 @@ module.exports = {
     getAllNotes,
     getNote,
     deleteNote,
-    updateNote
+    updateNote,
+    getAllNotesByFolder,
+    getAllNotesByName
 }
