@@ -38,6 +38,7 @@
 }
 
 
+
  //DELETE a folder
  const deleteFolder = async (req, res) => {
     const { folderId } = req.params;
