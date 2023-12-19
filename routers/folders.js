@@ -6,7 +6,8 @@ const {
     getAllFolders,
     getFolder,
     deleteFolder,
-    updateFolder
+    updateFolder,
+    getAllFoldersByUser
 
 } = require('../controllers/folders')
 
@@ -15,5 +16,6 @@ foldersRouter.get('/', getAllFolders)
 foldersRouter.get('/:id', getFolder)
 foldersRouter.delete('/:id', deleteFolder)
 foldersRouter.patch('/:id', updateFolder)
+foldersRouter.get("/user/:userId", getAllFoldersByUser)
 
 module.exports = foldersRouter
