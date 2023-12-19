@@ -6,7 +6,7 @@ This is the server for the notes app. The client side can be found [here](https:
 - Clone or fork this repo
 - Run `npm i` to install required packages
 - Run `touch .env`
-- Copy and paste `PORT=3000` and `MONGO_ARI=mongodb://username:password@localhost:27017/database?authSource=admin` into the .env file
+- Copy and paste `PORT=3000`, `NODE_ENV=development`, `JWT_SECRET=abc123` and `MONGO_ARI=mongodb://username:password@localhost:27017/database?authSource=admin` into the .env file
 - Open Docker
 - Run `docker pull mongo`
 - Edit the docker-compose.yaml file to your own specifications (i.e username, password and container name)
