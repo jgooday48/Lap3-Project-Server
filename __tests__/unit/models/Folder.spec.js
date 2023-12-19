@@ -1,23 +1,46 @@
+require('dotenv').config()
+
+const { MongoMemoryServer } = require('mongodb-memory-server');
+
 const Folder = require('../../../models/Folder')
 const mongoose = require('mongoose')
 
-const db = require("../../../app")
+let mongo = undefined
 
 const userData = {
     Name: "TekLoon"
 };
 
-beforeAll(async () => {
-    await db.setUp();
+beforeEach(async () => {  
+      mongo = await MongoMemoryServer.create();
+      const url = mongo.getUri();
+
+      await mongoose.connect(url);
+      
+      // await mongoose.connect(process.env.DB_URI_TEST); // connect mongoose db
+
+      // app.listen(4000, () => {
+      //     console.log(`API listening on Port ${4000}`
+      // )})
+      
+});
+  
+afterEach(async () => {
+    await mongoose.connection.dropDatabase();
+    await mongoose.connection.close();
+    await mongo.stop();
   });
   
-  afterEach(async () => {
-    await db.drop();
-  });
+// afterAll(async () => {
+//   // await db.dropDatabase(); 
+//     const collections = mongoose.connection.collections;
+
+//     for (const key in collections) {
+//         const collection = collections[key];
+//         await collection.deleteMany();
+//     }
   
-  afterAll(async () => {
-    await db.dropDatabase();
-  });
+//   });
 
 describe("Folder model", () => {
     it("create and save folder successfully", async () => {
