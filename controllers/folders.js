@@ -1,7 +1,7 @@
 const Folders = require("../models/Folder")
 const mongoose = require("mongoose")
 const User = require('../models/User')
-const Section = require('../models/Folder')
+
 
 
 
@@ -36,7 +36,7 @@ const Section = require('../models/Folder')
       const folders = await Folders.find({ User: userId });
 
       // Send the folders as a response
-      res.status(200).json({ folders });
+      res.status(200).json(folders);
     } catch (error) {
       console.error(error);
       res.status(500).json({ error: 'Internal Server Error' });

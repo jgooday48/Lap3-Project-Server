@@ -7,7 +7,7 @@ const htmlPurify = domPurifier(new JSDOM().window);
 
 // Define the Notes schema
 const NotesSchema = new mongoose.Schema({
-    Title: {
+    Name: {
         type: String,
     },
     Content: {
@@ -17,7 +17,7 @@ const NotesSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
-    Section: {
+    Folder: {
         type: mongoose.Schema.Types.ObjectId, ref: 'Folders'
     },
     User: {
