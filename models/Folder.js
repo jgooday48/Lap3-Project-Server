@@ -8,10 +8,10 @@ const FolderSchema = new mongoose.Schema(
         type: String,
       },
       Note: {
-        type: Note,
+        type: mongoose.Schema.Types.ObjectId, ref: 'Notes',
       },
       User: {
-        type: User
+        type: mongoose.Schema.Types.ObjectId, ref: 'User',
     }
     },
     

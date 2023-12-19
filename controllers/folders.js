@@ -27,9 +27,9 @@
 
  //CREATE a new folder
  const createFolder = async (req, res) => {
-    const { Name, User_Id, Note_ID, Section_ID } = req.body
+    const { Name, User_Id, Note_ID } = req.body
     try {
-        const folder = await Folders.create({ Name, User_Id, Note_ID, Section_ID })
+        const folder = await Folders.create({ Name, User_Id, Note_ID})
         res.status(200).json(folder)
     } catch (error) {
         res.status(400).json({ error: error.message })
@@ -60,20 +60,19 @@
 
  const updateFolder = async (req, res) => {
     const { folderId } = req.params;
-    const { Name, Section_ID, User_ID, Note_ID } = req.body;
+    const { Name, Folder_ID, User_ID, Note_ID } = req.body;
   
     try {
       const existingFolder = await Folders.findOne({ Folder_ID: folderId });
       if (!existingFolder) {
-        return res.status(404).json({ error: "note not found" });
+        return res.status(404).json({ error: "folder not found" });
       }
-      if (Name) existingFolder.Name = Name;
-      if (Section_ID) existingFolder.Section_ID = Content;
-      if (User_ID) existingFolder.User_ID = User_ID;
-      if (Note_ID) existingFolder.Note_ID = Note_ID;
-  
+      if (Name !== undefined) existingFolder.Name = Name;
+      if (Folder_ID !== undefined) existingFolder.Folder_ID = Content;
+      if (User_ID !== undefined) existingFolder.User_ID = User_ID;
+      if (Note_ID !== undefined) existingFolder.Note_ID = Note_ID;
       await existingFolder.save();
-      res.status(500).json({ message: "Folder updated", updateFolder: existingFolder });
+      res.status(200).json({ message: "Folder updated", updateFolder: existingFolder });
     } catch (error) {
       res.status(400).json({ error: error.message });
     }
