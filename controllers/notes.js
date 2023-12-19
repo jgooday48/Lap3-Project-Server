@@ -42,7 +42,6 @@ const getNote = async (req, res) => {
 const createNote = async (req, res) => {
     const { Title, Content, IsImportant, Section_Id, User_Id } = req.body;
     try {
-        // Assuming Content is an object with a "text" property
         const note = await Note.create({ Title, Content, IsImportant, Section: Section_Id, User: User_Id });
         res.status(201).json(note);
     } catch (error) {
@@ -73,28 +72,32 @@ const deleteNote = async(req,res)=>{
 
 
 //UPDATE a note
-const updateNote = async (req,res) => {
-    const { noteId } = req.params
-    const { Title, Content, IsImportant, Section, User_Id, Note_ID } = req.body
+const updateNote = async (req, res) => {
+  const { noteId } = req.params;
+  const { Title, Content, IsImportant, Section_Id, User_Id } = req.body;
 
-    try {
-        const existingNote = await Note.findOne({ Note_ID : noteId})
-        if(!existingNote){
-            return res.status(404).json({ error:"note not found"})
-        }
-        if (Title) existingNote.Title = Title;
-        if (Content) existingNote.Content = Content;
-        if (IsImportant !== undefined) existingNote.IsImportant = IsImportant;
-        if (Section) existingNote.Section = Section;
-        if (User_Id) existingNote.User_Id = User_Id;
-        if (Note_ID) existingNote.Note_ID = Note_ID;
-
-await existingNote.save()
-res.status(500).json({ message:"Note updated",updateNote:existingNote})
-    } catch (error) {
-        res.status(400).json({ error: error.message })
+  try {
+    const existingNote = await Note.findOne({ Note_ID: noteId });
+    if (!existingNote) {
+      return res.status(404).json({ error: "Note not found" });
     }
-} 
+
+    // Update only if the fields are present in the request body
+    if (Title !== undefined) existingNote.Title = Title;
+    if (Content !== undefined) existingNote.Content = Content;
+    if (IsImportant !== undefined) existingNote.IsImportant = IsImportant;
+    if (Section_Id !== undefined) existingNote.Section_Id = Section_Id;
+    if (User_Id !== undefined) existingNote.User_Id = User_Id;
+
+    await existingNote.save();
+    
+    // Return a success message along with the updated note
+    res.status(200).json({ message: "Note updated", updateNote: existingNote });
+  } catch (error) {
+    // Handle errors and return an appropriate response
+    res.status(400).json({ error: error.message });
+  }
+};
 
 
 
