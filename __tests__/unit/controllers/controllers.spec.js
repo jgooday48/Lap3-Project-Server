@@ -42,4 +42,4 @@ describe("Folder model", () => {
           expect(savedFolderWithInvalidField.nickname).toBeUndefined();
     })
 })
->>>>>>> 8e286972e5845f0f45b500e3f4f630bfd2520ea8
+
