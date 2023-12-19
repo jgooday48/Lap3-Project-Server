@@ -76,6 +76,7 @@ const NotesSchema = new mongoose.Schema({
     },
     IsImportant: {
         type: Boolean,
+        default: false
     },
     Section: {
         type: mongoose.Schema.Types.ObjectId, ref: 'Folders'
