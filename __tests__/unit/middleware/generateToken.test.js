@@ -3,11 +3,8 @@ const express = require('express');
 const app = express();
 const jwt = require('jsonwebtoken');
 
-
-// Import your utility function
 const generateToken = require('../../../utils/generateToken');
 
-// Mock environment variable for testing
 process.env.JWT_SECRET = 'abcd1234';
 
 app.get('/test-generate-token', async (req, res) => {
@@ -26,12 +23,9 @@ describe('generateToken utility function', () => {
 
     expect(response.status).toBe(200);
     expect(response.body).toHaveProperty('token');
-
-    // You can add more assertions if needed
   });
 
   it('should handle errors and respond with a 500 status', async () => {
-    // Mocking a situation where jwt.sign encounters an error
     jest.spyOn(jwt, 'sign').mockImplementationOnce((data, secret, options, callback) => {
       callback(new Error('Mocked signing error'), null);
     });
@@ -41,7 +35,6 @@ describe('generateToken utility function', () => {
     expect(response.status).toBe(500);
     expect(response.body).toHaveProperty('error', 'Mocked signing error');
 
-    // Reset the mock to avoid affecting other tests
     jest.restoreAllMocks();
   });
 });
