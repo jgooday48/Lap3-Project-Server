@@ -51,6 +51,20 @@ const createFolder = async (req, res) => {
 };
 
 
+//DELETE a folder
+
+// const deleteFolder = async (req, res) => {
+//   const { id } = req.params;
+//   if (!id) {
+//     return res.status(400).json({ error: "no id passed" });
+//   }
+//   try {
+//     await existingNote.deleteOne({ _id: id });
+//     res.status(200).json({ message: "Folder deleted successfully" });
+//   } catch (error) {
+//     res.status(400).json({ error: error.message });
+//   }
+// };
 
 const deleteFolder = async (req, res) => {
   const { id } = req.params;
