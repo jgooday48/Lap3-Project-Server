@@ -9,21 +9,28 @@ const userData = {
 beforeEach(async () => {
       mongo = await MongoMemoryServer.create();
       const url = mongo.getUri();
+      console.log(typeof url)
+      console.log(mongo)
       await mongoose.connect(url);
 });
+
 afterEach(async () => {
     await mongoose.connection.dropDatabase();
     await mongoose.connection.close();
     await mongo.stop();
   });
+
 // afterAll(async () => {
 //   // await db.dropDatabase();
 //     const collections = mongoose.connection.collections;
+
 //     for (const key in collections) {
 //         const collection = collections[key];
 //         await collection.deleteMany();
 //     }
+
 //   });
+
 describe("Folder model", () => {
     it("create and save folder successfully", async () => {
         const validFolder = new Folder(userData)

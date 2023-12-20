@@ -1,4 +1,3 @@
-
 const mongoose = require("mongoose");
 const domPurifier = require('dompurify');
 const { JSDOM } = require('jsdom');
@@ -11,6 +10,7 @@ const NotesSchema = new mongoose.Schema({
         type: String,
     },
     Content: {
+
         type: String
     },
     IsImportant: {
@@ -19,6 +19,7 @@ const NotesSchema = new mongoose.Schema({
     },
     Folder: {
         type: mongoose.Schema.Types.ObjectId, ref: 'Folders'
+
     },
     User: {
         type: mongoose.Schema.Types.ObjectId, ref: 'User'
@@ -28,3 +29,4 @@ const NotesSchema = new mongoose.Schema({
 // Create the Notes model and export it
 const NotesModel = mongoose.model("Notes", NotesSchema);
 module.exports = NotesModel;
+

@@ -1,3 +1,5 @@
+//Unit Test
+
 const Note = require("../../../models/Note");
 const { getNote } = require("../../../controllers/notes");
 const mongoose = require("mongoose");
@@ -35,4 +37,12 @@ describe("getNote", () => {
     // Restore the original implementation after the test
     findByIdSpy.mockRestore();
   });
+
+
+
+
+
+
+
+
 });
