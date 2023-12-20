@@ -9,6 +9,8 @@ const userData = {
 beforeEach(async () => {
       mongo = await MongoMemoryServer.create();
       const url = mongo.getUri();
+      console.log(typeof url)
+      console.log(mongo)
       await mongoose.connect(url);
 });
 
