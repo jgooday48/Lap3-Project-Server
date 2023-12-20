@@ -38,11 +38,41 @@ describe("getNote", () => {
     findByIdSpy.mockRestore();
   });
 
+});
 
+describe("deleteNote", () => {
+  it("should get a single note", async () => {
+    // Spy on the findById method
+    const findOneSpy = jest.spyOn(Note, "findOne");
 
+    // Mock delete note data
+    //const new_id = new mongoose.Types.ObjectId();
+    // const mockNote = {
+    //   // _id: new_id,
+    //   // Title: "Mocked Note",
+    //   // Content: "Mocked Content",
+    //   // Section: new mongoose.Types.ObjectId(),
+    //   // User: new mongoose.Types.ObjectId(),
+    // };
 
+    const mockNote = null;
 
+    // Mock the implementation of findById
+    findOneSpy.mockResolvedValueOnce(mockNote);
 
+    // Mock Express request and response objects
+    const req = { params: { id: 123 } };
+    const res = { status: jest.fn().mockReturnThis(), json: jest.fn() };
 
+    // Call the getNote function
+    await getNote(req, res);
 
+    // Perform assertions
+    //expect(findOneSpy).toHaveBeenCalledWith(new_id);
+    expect(res.status).toHaveBeenCalledWith(404);
+    // expect(res.json).toHaveBeenCalledWith(mockNote);
+
+    // Restore the original implementation after the test
+    findOneSpy.mockRestore();
+  });
 });
