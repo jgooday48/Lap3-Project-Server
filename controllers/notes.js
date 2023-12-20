@@ -63,7 +63,7 @@ const getNote = async (req, res) => {
 
 
 const createNote = async (req, res) => {
-    const { Name, Content, IsImportant, folderId, User } = req.body;
+    const { Name, Content, IsImportant, Folder, User } = req.body;
 
     // Check if a note with the same Name and content already exists
     const existingNote = await Note.findOne({ Name, Content });
@@ -77,7 +77,7 @@ const createNote = async (req, res) => {
                 Name,
                 Content,
                 IsImportant: IsImportant || false,
-                Folder: folderId,
+                Folder: Folder,
                 User: User
             });
 
