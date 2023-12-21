@@ -1,40 +1,39 @@
-const Note = require('../models/Note')
-const mongoose = require('mongoose')
-const User = require('../models/User')
-const Section = require('../models/Folder')
+const Note = require("../models/Note");
+const mongoose = require("mongoose");
+const User = require("../models/User");
+const Section = require("../models/Folder");
 
 //GET all notes
 const getAllNotes = async (req, res) => {
-    const notes = await Note.find({}).sort({createdAt: -1})
-    res.status(200).json(notes)
-}
-
+  const notes = await Note.find({}).sort({ createdAt: -1 });
+  res.status(200).json(notes);
+};
 
 const getAllNotesByFolder = async (req, res) => {
-      try {
-        
-          const folderId = req.params.folderId;
+  try {
+    const folderId = req.params.folderId;
 
-        
-        const notes = await Note.find({ Folder: folderId });
+    const notes = await Note.find({ Folder: folderId });
 
-        res.status(200).json(notes );
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, error: 'Server Error' });
-    }
+    res.status(200).json(notes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: "Server Error" });
+  }
 };
 
 const getAllNotesByName = async (req, res) => {
   const { name } = req.params;
 
   try {
-    const notes = await Note.find({ Name: { $regex: new RegExp(name, 'i') } })
-      .populate('Folder')
-      .populate('User');
+    const notes = await Note.find({ Name: { $regex: new RegExp(name, "i") } })
+      .populate("Folder")
+      .populate("User");
 
     if (notes.length === 0) {
-      return res.status(404).json({ error: "No notes found with the given name" });
+      return res
+        .status(404)
+        .json({ error: "No notes found with the given name" });
     }
 
     res.status(200).json(notes);
@@ -43,16 +42,15 @@ const getAllNotesByName = async (req, res) => {
   }
 };
 
-
 //GET a single notes
 const getNote = async (req, res) => {
-    const { id } = req.params
+  const { id } = req.params;
 
-    const note = await Note.findById(id)
+  const note = await Note.findById(id);
 
-    if (!mongoose.Types.ObjectId.isValid(id)) {
-        return res.status(404).json({error: 'No such workout'})
-    }
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: "No such workout" });
+  }
 
     if (!note) {
         return res.status(404).json({error: 'No such note'})
@@ -89,48 +87,52 @@ const createNote = async (req, res) => {
             res.status(500).json({ error: 'Internal Server Error' });
         }
     }
+  if (!note) {
+    return res.status(404).json({ error: "No such note" });
+  }
+  res.status(200).json(newNote);
 };
 
 
 
-
 //DELETE a note
-const deleteNote = async(req,res)=>{
-    const { noteId } = req.params;
-    try {
+const deleteNote = async (req, res) => {
+  const { id } = req.params;
+  if (!id) {
+    return res.status(400).json({ error: "no id passed" });
+  }
 
-        const existingNote = await Note.findOne({ Note_ID : noteId})
-        if(!existingNote){
-            return res.status(404).json({ error:"note not found"})
-        }
-        await existingNote.deleteOne({Note_ID : noteId});
-        res.status(200).json({ message: 'Note deleted successfully' });
-    } catch (error) {
-        res.status(400).json({ error: error.message })
+  try {
+    const existingNote = await Note.findOne({ _id: id });
+    if (!existingNote) {
+      return res.status(404).json({ error: "note not found" });
     }
-}
-
-
-
+    await existingNote.deleteOne({ _id: id });
+    res.status(200).json({ message: "Note deleted successfully" });
+  } catch (error) {
+    res.status(400).json({ error: error.message });
+  }
+};
 
 // UPDATE a note
 const updateNote = async (req, res) => {
- 
-//   const { Name, Content, IsImportant, Section_Id, User_Id } = req.body;
+  //   const { Name, Content, IsImportant, Section_Id, User_Id } = req.body;
 
-    try {
-        const { id } = req.params;
-        console.log("note: ", id)
-      const existingNote = await Note.findOneAndUpdate({ _id: id }, {
-          ...req.body
-      });
+  try {
+    const { id } = req.params;
+    console.log("note: ", req.params);
+    console.log("note: ", id);
+    const existingNote = await Note.findOneAndUpdate(
+      { _id: id },
+      {
+        ...req.body,
+      }
+    );
     if (!existingNote) {
       return res.status(404).json({ error: "Note not found" });
     }
 
-      const updatedNote = await Note.findById(id);
- 
-
+    const updatedNote = await Note.findById(id);
 
     // await existingNote.save();
 
@@ -142,18 +144,13 @@ const updateNote = async (req, res) => {
   }
 };
 
-
-
-
-
-
-
 module.exports = {
-    createNote,
-    getAllNotes,
-    getNote,
-    deleteNote,
-    updateNote,
-    getAllNotesByFolder,
-    getAllNotesByName
-}
+  createNote,
+  getAllNotes,
+  getNote,
+  deleteNote,
+  updateNote,
+  getAllNotesByFolder,
+  getAllNotesByName,
+};
+
