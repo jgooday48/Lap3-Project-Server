@@ -61,36 +61,35 @@ const getNote = async (req, res) => {
 
 
 const createNote = async (req, res) => {
-    const { Name, Content, IsImportant, Folder, User } = req.body;
+    try {
+        const { Name, Content, IsImportant, Folder, User } = req.body;
 
-    // Check if a note with the same Name and content already exists
-    const existingNote = await Note.findOne({ Name, Content });
+        // Check if a note with the same Name and content already exists
+        const existingNote = await Note.findOne({ Name, Content });
 
-    if (existingNote) {
-        res.status(409).json({ error: 'Note with the same Name and content already exists' });
-    } else {
-        try {
-            // Create a new note
-            const newNote = new Note({
-                Name,
-                Content,
-                IsImportant: IsImportant || false,
-                Folder: Folder,
-                User: User
-            });
-
-            // Save the new note
-            await newNote.save();
-            res.status(201).json(newNote);
-        } catch (error) {
-            console.error('Error creating note:', error);
-            res.status(500).json({ error: 'Internal Server Error' });
+        if (existingNote) {
+            return res.status(409).json({ error: 'Note with the same Name and content already exists' });
         }
+
+        // Create a new note
+        const newNote = new Note({
+            Name,
+            Content,
+            IsImportant: IsImportant || false,
+            Folder,
+            User
+        });
+
+        // Save the new note
+        await newNote.save();
+
+        // Send the new note as a response
+        res.status(201).json(newNote);
+
+    } catch (error) {
+        console.error('Error creating note:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
-  if (!note) {
-    return res.status(404).json({ error: "No such note" });
-  }
-  res.status(200).json(newNote);
 };
 
 
