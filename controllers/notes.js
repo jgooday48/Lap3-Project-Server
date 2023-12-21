@@ -22,6 +22,25 @@ const getAllNotesByFolder = async (req, res) => {
   }
 };
 
+
+
+const getAllNotesByUser = async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const notes = await Note.find({ User: userId });
+
+    res.status(200).json(notes);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, error: "Server Error" });
+  }
+};
+
+
+
+
+
 const getAllNotesByName = async (req, res) => {
   const { name } = req.params;
 
@@ -151,5 +170,6 @@ module.exports = {
   updateNote,
   getAllNotesByFolder,
   getAllNotesByName,
+  getAllNotesByUser
 };
 
