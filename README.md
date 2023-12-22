@@ -1,6 +1,6 @@
-# Lap3-Project-Server
+# Note-Worthy Server
 
-This is the server for the notes app. The client side can be found [here](https://github.com/jgooday48/Lap3-Project-Client)
+This is the server for the notes app. The client side can be found [here](https://github.com/jgooday48/Lap3-Project-Client). The link to the server can be found [here](https://reddy-server-33.onrender.com/)
 ## Instructions for Installation and Usage
 
 - Clone or fork this repo
